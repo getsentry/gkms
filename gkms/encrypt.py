@@ -4,7 +4,7 @@ import json
 from google.cloud import kms
 from google.cloud import storage
 
-from utils import open_file
+from gkms.utils import open_file
 
 
 def encrypt_cmd(args):
