@@ -1,9 +1,11 @@
 import argparse
 
+from decrypt import decrypt_cmd
 from encrypt import encrypt_cmd
 
 
 AVAILABLE_COMMANDS = {
+    'decrypt': decrypt_cmd,
     'encrypt': encrypt_cmd,
 }
 
@@ -17,6 +19,7 @@ def main():
     ################################################################################################
     # Main Parser
     ################################################################################################
+
     description = 'Utility for encrypting secrets using GCP\'s KMS and storing it in GCS.'
     parser = argparse.ArgumentParser(description=description)
 
@@ -24,8 +27,28 @@ def main():
     subparser.required = True # NOTE: For backcompat, only available as an argument in .3.7+
 
     ################################################################################################
+    # Decrypt Parser
+    ################################################################################################
+
+    description = 'Download and decrypt secrets'
+    decrypt_parser = subparser.add_parser('decrypt', help=description)
+
+    description = 'The GCP project to use.'
+    decrypt_parser.add_argument('-p', '--project', metavar='project',
+                                type=str, required=True, help=description)
+
+    description = 'The GCS bucket to hold the secret'
+    decrypt_parser.add_argument('-b', '--bucket', metavar='bucket',
+                                type=str, required=True, help=description)
+
+    description = 'The target file name to store the secret.'
+    decrypt_parser.add_argument('-t', '--target', metavar='target',
+                                type=str, required=True, help=description)
+
+    ################################################################################################
     # Encrypt Parser
     ################################################################################################
+
     description = 'Encrypt and upload secrets'
     encrypt_parser = subparser.add_parser('encrypt', help=description)
 
