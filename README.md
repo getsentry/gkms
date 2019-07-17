@@ -18,7 +18,7 @@ Please see [https://googleapis.github.io/google-cloud-python/latest/core/auth.ht
 
 ```shell
 gkms encrypt \
-    --project my-gcp-project \
+    --project my-project \
     --location global \
     --ring my-key-ring \
     --key my-crypto-key \
@@ -28,7 +28,7 @@ gkms encrypt \
     --secret my-secret.txt
 
 gkms decrypt \
-    --project my-gcp-project \
+    --project my-project \
     --bucket my-bucket \
     --target my-target.txt
 ```
@@ -39,7 +39,7 @@ gkms decrypt \
 import gkms
 
 gkms.encrypt(
-    project='my-gcp-project',
+    project='my-project',
     location='global',
     keyring='my-key-ring',
     cryptokey='my-crypto-key',
@@ -50,7 +50,7 @@ gkms.encrypt(
 )
 
 decrypted = gkms.decrypt(
-    project='my-gcp-project',
+    project='my-project',
     bucket='my-bucket',
     target='my-secret.txt',
 )

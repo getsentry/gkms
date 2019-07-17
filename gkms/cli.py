@@ -2,11 +2,13 @@ import argparse
 
 from gkms.cmd.decrypt import decrypt_cmd
 from gkms.cmd.encrypt import encrypt_cmd
+from gkms.cmd.reencrypt import reencrypt_cmd
 
 
 AVAILABLE_COMMANDS = {
     'decrypt': decrypt_cmd,
     'encrypt': encrypt_cmd,
+    'reencrypt': reencrypt_cmd,
 }
 
 
@@ -37,11 +39,11 @@ def main():
     decrypt_parser.add_argument('-p', '--project', metavar='project',
                                 type=str, required=True, help=description)
 
-    description = 'The GCS bucket to hold the secret'
+    description = 'The GCS bucket that holds the secret'
     decrypt_parser.add_argument('-b', '--bucket', metavar='bucket',
                                 type=str, required=True, help=description)
 
-    description = 'The target file name to store the secret.'
+    description = 'The GCS object that holds the secret'
     decrypt_parser.add_argument('-t', '--target', metavar='target',
                                 type=str, required=True, help=description)
 
@@ -83,6 +85,25 @@ def main():
     description = 'The target file name to store the secret.'
     encrypt_parser.add_argument('-t', '--target', metavar='target',
                                 type=str, required=True, help=description)
+
+    ################################################################################################
+    # Rotate Parser
+    ################################################################################################
+
+    description = 'Reencrypt the secret using the latest primary key'
+    reencrypt_parser = subparser.add_parser('reencrypt', help=description)
+
+    description = 'The GCP project to use.'
+    reencrypt_parser.add_argument('-p', '--project', metavar='project',
+                                  type=str, required=True, help=description)
+
+    description = 'The GCS bucket that holds the secret'
+    reencrypt_parser.add_argument('-b', '--bucket', metavar='bucket',
+                                  type=str, required=True, help=description)
+
+    description = 'The GCS object that holds the secret.'
+    reencrypt_parser.add_argument('-t', '--target', metavar='target',
+                                  type=str, required=True, help=description)
 
     ################################################################################################
     # Dispatch Commands
