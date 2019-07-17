@@ -24,7 +24,7 @@ def get_key(project, location, keyring, cryptokey, version):
 
 
 def upload(project, bucket_name, blob_name, string):
-    client = storage.Client(project)
+    client = storage.Client(project=project)
     bucket = client.bucket(bucket_name)
     if not bucket.exists():
         bucket.create()

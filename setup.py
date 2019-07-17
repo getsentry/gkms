@@ -1,6 +1,15 @@
 from setuptools import find_packages, setup
 
 
+dependencies = [
+    'google-cloud-storage>=1.16.1,<2',
+    'google-cloud-kms>=1.1.0,<2',
+]
+
+dev_dependencies = [
+    'pytest>=5.0.1,<6',
+]
+
 setup(
     name='gkms',
     version='0.0.1',
@@ -37,7 +46,10 @@ setup(
         'decrypt',
     ],
     packages=find_packages(exclude=['tests', '*.tests', '*.tests.*', 'tests.*']),
-    install_requires=open('requirements.txt').read().split('\n'),
+    install_requires=dependencies,
+    extras_require={
+        'dev': dev_dependencies,
+    },
     entry_points={
         'console_scripts': ['gkms=gkms.cli:main'],
     }

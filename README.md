@@ -39,8 +39,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Set up your virual environment however you like.
 
 ```shell
-pip install -e .
-pip install -r requirements-dev.txt
+pip install -e .[dev]
 ```
 
 You're ready to start developing!

@@ -1,7 +1,7 @@
 import argparse
 
-from gkms.decrypt import decrypt_cmd
-from gkms.encrypt import encrypt_cmd
+from gkms.cmd.decrypt import decrypt_cmd
+from gkms.cmd.encrypt import encrypt_cmd
 
 
 AVAILABLE_COMMANDS = {
