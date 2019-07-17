@@ -17,8 +17,20 @@ Please see [https://googleapis.github.io/google-cloud-python/latest/core/auth.ht
 ### CLI
 
 ```shell
-gkms encrypt --project my-gcp-project --location global --ring my-key-ring --key my-crypto-key --version 1 --bucket my-bucket --target my-target.txt --secret my-secret.txt
-gkms decrypt --project my-gcp-project --bucket my-bucket --target my-target.txt
+gkms encrypt \
+    --project my-gcp-project \
+    --location global \
+    --ring my-key-ring \
+    --key my-crypto-key \
+    --version 1 \
+    --bucket my-bucket \
+    --target my-target.txt \
+    --secret my-secret.txt
+
+gkms decrypt \
+    --project my-gcp-project \
+    --bucket my-bucket \
+    --target my-target.txt
 ```
 
 ### Python
@@ -26,7 +38,9 @@ gkms decrypt --project my-gcp-project --bucket my-bucket --target my-target.txt
 ```python
 import gkms
 
-gkms.encrypt('my-gcp-project', 'global', 'my-key-ring', 'my-crypto-key', '1', 'my-bucket', 'my-secret.txt', 'my-secret.txt')
+gkms.encrypt('my-gcp-project', 'global', 'my-key-ring', 'my-crypto-key',
+             '1', 'my-bucket', 'my-secret.txt', 'my-secret.txt')
+
 decrypted = gkms.decrypt('my-gcp-project', 'my-bucket', 'my-secret.txt')
 ```
 
@@ -49,3 +63,7 @@ You're ready to start developing!
 ```shell
 pytest
 ```
+
+## Disclaimer
+
+`gkms` merely allows you to keep your secrets in GCS buckets allowing you specify permissions via IAM roles. This does **not** replace projects like HashiCorp Vault! Attackers who gain access to your service accounts will have access to the secrets.
