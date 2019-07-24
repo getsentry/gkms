@@ -1,14 +1,14 @@
 from setuptools import find_packages, setup
 
 
-dependencies = [
+dependencies = (
     'google-cloud-storage>=1.16.1,<2',
     'google-cloud-kms>=1.1.0,<2',
-]
+)
 
-dev_dependencies = [
+dev_dependencies = (
     'pytest>=5.0.1,<6',
-]
+)
 
 setup(
     name='gkms',
@@ -29,11 +29,7 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Security',
     ],
-    platforms=[
-        'MacOS',
-        'Unix',
-        'Windows',
-    ],
+    platforms='Posix; MacOS X; Windows',
     keywords=[
         'cloud'
         'gcp',
