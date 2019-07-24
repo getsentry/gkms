@@ -39,20 +39,20 @@ gkms decrypt \
 import gkms
 
 gkms.encrypt(
-    'my-gcp-project',
-    'global',
-    'my-key-ring',
-    'my-crypto-key',
-    '1',
-    'my-bucket',
-    'my-secret.txt',
-    'my-secret.txt'
+    project='my-gcp-project',
+    location='global',
+    keyring='my-key-ring',
+    cryptokey='my-crypto-key',
+    version='1',
+    bucket='my-bucket',
+    target='my-secret.txt',
+    secret_name'my-secret.txt',
 )
 
 decrypted = gkms.decrypt(
-    'my-gcp-project',
-    'my-bucket',
-    'my-secret.txt'
+    project='my-gcp-project',
+    bucket='my-bucket',
+    target='my-secret.txt',
 )
 ```
 
