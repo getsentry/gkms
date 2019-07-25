@@ -1,7 +1,7 @@
 import argparse
 
-from decrypt import decrypt_cmd
-from encrypt import encrypt_cmd
+from gkms.cmd.decrypt import decrypt_cmd
+from gkms.cmd.encrypt import encrypt_cmd
 
 
 AVAILABLE_COMMANDS = {
@@ -24,7 +24,7 @@ def main():
     parser = argparse.ArgumentParser(description=description)
 
     subparser = parser.add_subparsers(title='subcommands', dest='command')
-    subparser.required = True # NOTE: For backcompat, only available as an argument in .3.7+
+    subparser.required = True  # NOTE: For backward compatibility, only available as a kwarg in 3.7+
 
     ################################################################################################
     # Decrypt Parser
