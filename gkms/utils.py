@@ -18,8 +18,8 @@ def open_file(file_name, mode='r'):
         else:
             raise ValueError('Invalid file mode: {}'.format(mode))
     else:
-        with open(file_name, mode) as f:
-            yield f
+        with open(file_name, mode) as opened_file:
+            yield opened_file
 
 
 def get_key(project, location, keyring, cryptokey, version):
@@ -55,7 +55,7 @@ def upload(project, bucket_name, blob_name, string, client=None):
     blob.upload_from_string(string)
 
 
-def save_secret(project, bucket, target, encrypted, key, client=None):
+def save_secret(project, bucket, target, encrypted, key, client=None):  # pylint: disable=too-many-arguments
     secret = json.dumps({
         'secret': encrypted,
         'key': key,

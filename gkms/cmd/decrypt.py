@@ -1,6 +1,3 @@
-import base64
-import json
-
 from gkms.utils import get_secret
 from gkms.utils import decrypt_secret
 

@@ -1,6 +1,3 @@
-import base64
-import json
-
 from google.cloud import kms
 from google.cloud import storage
 

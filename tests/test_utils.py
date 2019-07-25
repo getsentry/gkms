@@ -3,7 +3,6 @@ import json
 
 from unittest import TestCase
 from unittest.mock import Mock
-from unittest.mock import PropertyMock
 from unittest.mock import patch
 
 from pytest import raises
@@ -21,28 +20,45 @@ from gkms.utils import decrypt_secret
 class TextOpenFile(TestCase):
     def test_stdin(self):
         with patch('gkms.utils.sys.stdin') as stdin:
-            with open_file('-') as f:
-                assert f is stdin
+            with open_file('-') as opened_file:
+                assert opened_file is stdin
 
-            with open_file('-', 'r') as f:
-                assert f is stdin
+            with open_file('-', 'r') as opened_file:
+                assert opened_file is stdin
 
     def test_stdout(self):
         with patch('gkms.utils.sys.stdout') as stdout:
-            with open_file('-', 'a') as f:
-                assert f is stdout
+            with open_file('-', 'a') as opened_file:
+                assert opened_file is stdout
 
     def test_std_bad_mode(self):
         with raises(ValueError):
-            with open_file('-', 'x') as f:
-                assert f is stdin
+            with open_file('-', 'x'):
+                pass
 
 
 class TestGetKey(TestCase):
     def test_get_key(self):
-        with_version, without_version = get_key('my-project', 'my-location', 'my-key-ring', 'my-crypto-key', 'my-version')
-        assert with_version == 'projects/my-project/locations/my-location/keyRings/my-key-ring/cryptoKeys/my-crypto-key/cryptoKeyVersions/my-version'
-        assert without_version == 'projects/my-project/locations/my-location/keyRings/my-key-ring/cryptoKeys/my-crypto-key'
+        with_version, without_version = get_key(
+            'my-project',
+            'my-location',
+            'my-key-ring',
+            'my-crypto-key',
+            'my-version',
+        )
+        assert with_version == '/'.join([
+            'projects/my-project',
+            'locations/my-location',
+            'keyRings/my-key-ring',
+            'cryptoKeys/my-crypto-key',
+            'cryptoKeyVersions/my-version',
+        ])
+        assert without_version == '/'.join([
+            'projects/my-project',
+            'locations/my-location',
+            'keyRings/my-key-ring',
+            'cryptoKeys/my-crypto-key',
+        ])
 
 
 class TestDownload(TestCase):
@@ -71,7 +87,8 @@ class TestDownload(TestCase):
 class TestUpload(TestCase):
     def test_upload_as_string(self):
         with patch('gkms.utils.storage') as storage:
-            with patch.object(storage.Client().bucket().blob(), 'upload_from_string') as upload_from_string:
+            with patch.object(storage.Client().bucket().blob(), 'upload_from_string') \
+                    as upload_from_string:
                 upload('my-project', 'my-bucket', 'my-blob', 'my-string')
                 upload_from_string.assert_called_once_with('my-string')
 
@@ -92,13 +109,14 @@ class TestUpload(TestCase):
 
 class TestSaveSecret(TestCase):
     def test_uploads_json_dump(self):
-        with patch('gkms.utils.upload') as upload:
+        with patch('gkms.utils.upload') as patched_upload:
             save_secret('my-project', 'my-bucket', 'my-blob', 'my encrypted secret', 'my-key')
             dump = json.dumps({
                 'secret': 'my encrypted secret',
                 'key': 'my-key',
             })
-            upload.assert_called_once_with('my-project', 'my-bucket', 'my-blob', dump, client=None)
+            patched_upload.assert_called_once_with(
+                'my-project', 'my-bucket', 'my-blob', dump, client=None)
 
 
 class TestEncryptSecret(TestCase):
@@ -107,7 +125,7 @@ class TestEncryptSecret(TestCase):
             secret = Mock()
             cipher = b'my secret'
             type(secret).ciphertext = cipher
-            with patch.object(kms.KeyManagementServiceClient(), 'encrypt', return_value=secret) as encrypt:
+            with patch.object(kms.KeyManagementServiceClient(), 'encrypt', return_value=secret):
                 b64 = encrypt_secret('my-key', cipher.decode('utf-8'))
                 assert b64 == base64.b64encode(cipher).decode('utf-8')
 
@@ -119,10 +137,10 @@ class TestGetSecret(TestCase):
             'key': 'my-key',
             'secret': base64.b64encode(bytes(secret, 'ascii')).decode('utf-8'),
         })
-        with patch('gkms.utils.download', return_value=blob) as download:
+        with patch('gkms.utils.download', return_value=blob):
             secret_blob = get_secret('my-project', 'my-bucket', 'my-blob')
             assert secret == secret_blob['secret'].decode('utf-8')
-            assert 'my-key' == secret_blob['key']
+            assert secret_blob['key'] == 'my-key'
 
 
 class TestDecryptSecret(TestCase):
@@ -131,5 +149,5 @@ class TestDecryptSecret(TestCase):
             secret = Mock()
             plaintext = 'im the secret'
             type(secret).plaintext = bytes(plaintext, 'ascii')
-            with patch.object(kms.KeyManagementServiceClient(), 'decrypt', return_value=secret) as decrypt:
+            with patch.object(kms.KeyManagementServiceClient(), 'decrypt', return_value=secret):
                 assert plaintext == decrypt_secret('my-key', 'its a biiiig secret')
