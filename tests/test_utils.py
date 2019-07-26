@@ -8,7 +8,7 @@ from unittest.mock import patch
 from pytest import raises
 
 from gkms.utils import open_file
-from gkms.utils import get_key
+from gkms.utils import get_unversioned_key
 from gkms.utils import download
 from gkms.utils import upload
 from gkms.utils import save_secret
@@ -37,23 +37,15 @@ class TextOpenFile(TestCase):
                 pass
 
 
-class TestGetKey(TestCase):
-    def test_get_key(self):
-        with_version, without_version = get_key(
+class TestGetUnversionedKey(TestCase):
+    def test_get_unversioned_key(self):
+        key = get_unversioned_key(
             'my-project',
             'my-location',
             'my-key-ring',
             'my-crypto-key',
-            'my-version',
         )
-        assert with_version == '/'.join([
-            'projects/my-project',
-            'locations/my-location',
-            'keyRings/my-key-ring',
-            'cryptoKeys/my-crypto-key',
-            'cryptoKeyVersions/my-version',
-        ])
-        assert without_version == '/'.join([
+        assert key == '/'.join([
             'projects/my-project',
             'locations/my-location',
             'keyRings/my-key-ring',

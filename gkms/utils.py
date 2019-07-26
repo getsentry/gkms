@@ -22,15 +22,14 @@ def open_file(file_name, mode='r'):
             yield opened_file
 
 
-def get_key(project, location, keyring, cryptokey, version):
+def get_unversioned_key(project, location, keyring, cryptokey):
     key_pieces = [
         'projects/{}'.format(project),
         'locations/{}'.format(location),
         'keyRings/{}'.format(keyring),
         'cryptoKeys/{}'.format(cryptokey),
-        'cryptoKeyVersions/{}'.format(version),
     ]
-    return '/'.join(key_pieces), '/'.join(key_pieces[:-1])
+    return '/'.join(key_pieces)
 
 
 def download(project, bucket_name, blob_name, client=None):
