@@ -46,7 +46,7 @@ gkms.encrypt(
     version='1',
     bucket='my-bucket',
     target='my-secret.txt',
-    secret_name'my-secret.txt',
+    secret_name='my-secret.txt',
 )
 
 decrypted = gkms.decrypt(
