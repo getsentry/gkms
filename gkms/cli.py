@@ -70,10 +70,6 @@ def main():
     encrypt_parser.add_argument('-k', '--key', metavar='cryptokey',
                                 type=str, required=True, help=description)
 
-    description = 'The key version.'
-    encrypt_parser.add_argument('-v', '--version', metavar='version',
-                                type=str, required=True, help=description)
-
     description = 'The file containing the secret. Use - for stdin.'
     encrypt_parser.add_argument('-s', '--secret', metavar='secret',
                                 type=str, required=True, help=description)
