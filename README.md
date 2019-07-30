@@ -22,12 +22,16 @@ gkms encrypt \
     --location global \
     --ring my-key-ring \
     --key my-crypto-key \
-    --version 1 \
     --bucket my-bucket \
     --target my-target.txt \
     --secret my-secret.txt
 
 gkms decrypt \
+    --project my-project \
+    --bucket my-bucket \
+    --target my-target.txt
+
+gkms reencrypt \
     --project my-project \
     --bucket my-bucket \
     --target my-target.txt
@@ -43,13 +47,18 @@ gkms.encrypt(
     location='global',
     keyring='my-key-ring',
     cryptokey='my-crypto-key',
-    version='1',
     bucket='my-bucket',
     target='my-secret.txt',
     secret_name='my-secret.txt',
 )
 
 decrypted = gkms.decrypt(
+    project='my-project',
+    bucket='my-bucket',
+    target='my-secret.txt',
+)
+
+gkms.reencrypt(
     project='my-project',
     bucket='my-bucket',
     target='my-secret.txt',
